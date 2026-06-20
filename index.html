@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tesla Conference — Registration System Proposal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#15171a;
+    --ink-soft:#5b6168;
+    --line:#e6e7e9;
+    --paper:#ffffff;
+    --mist:#f6f7f8;
+    --red:#e31937;
+    --green:#16a34a;
+    --blue:#2563eb;
+    --purple:#8b5cf6;
+    --green-soft:#e8f6ed;
+    --blue-soft:#e8f0fe;
+    --shadow:0 1px 2px rgba(20,23,26,.04),0 8px 28px rgba(20,23,26,.06);
+    --radius:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Manrope',system-ui,sans-serif;
+    color:var(--ink);
+    background:var(--mist);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:0 28px}
+  .display{font-family:'Space Grotesk',sans-serif;letter-spacing:-.02em;line-height:1.1}
+
+  /* ---- Hero ---- */
+  header.hero{
+    background:var(--ink);
+    color:#fff;
+    padding:84px 0 96px;
+    position:relative;
+    overflow:hidden;
+  }
+  header.hero::before{
+    content:"";position:absolute;inset:0;
+    background:radial-gradient(900px 360px at 78% -10%,rgba(227,25,55,.32),transparent 60%);
+  }
+  .hero .wrap{position:relative}
+  .eyebrow{
+    font-family:'Space Grotesk',sans-serif;
+    text-transform:uppercase;letter-spacing:.28em;
+    font-size:12px;font-weight:600;color:#ff5d75;margin-bottom:22px;
+  }
+  header.hero h1{font-size:clamp(38px,6vw,68px);font-weight:700;max-width:15ch}
+  header.hero p{
+    margin-top:22px;max-width:54ch;font-size:18px;color:#c4c8cd;
+  }
+  .hero-pills{display:flex;gap:10px;flex-wrap:wrap;margin-top:34px}
+  .hero-pills span{
+    padding:8px 15px;border:1px solid rgba(255,255,255,.2);border-radius:999px;
+    font-size:13px;color:#e6e7e9;font-family:'Space Grotesk';font-weight:500;
+  }
+
+  /* ---- Executive Summary ---- */
+  .exec{background:var(--paper);border-bottom:1px solid var(--line);padding:48px 0}
+  .exec .label{
+    font-family:'Space Grotesk',sans-serif;text-transform:uppercase;
+    letter-spacing:.22em;font-size:12px;font-weight:600;color:var(--red);margin-bottom:18px;
+  }
+  .exec p{
+    font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:-.01em;
+    font-size:clamp(20px,2.6vw,28px);line-height:1.4;color:var(--ink);
+    border-left:3px solid var(--red);padding-left:22px;max-width:42ch;
+  }
+  @media(max-width:430px){
+    .exec p{font-size:19px;padding-left:16px}
+  }
+
+  /* ---- Section scaffolding ---- */
+  section{padding:72px 0;border-bottom:1px solid var(--line)}
+  section:nth-of-type(odd){background:var(--paper)}
+  .sec-head{display:flex;align-items:baseline;gap:18px;margin-bottom:42px}
+  .sec-num{
+    font-family:'Space Grotesk',sans-serif;font-weight:700;
+    font-size:15px;color:var(--red);
+    border:1.5px solid var(--red);border-radius:8px;
+    padding:4px 10px;flex:none;
+  }
+  .sec-title{font-size:clamp(26px,3.4vw,38px);font-weight:700}
+  .sec-sub{color:var(--ink-soft);font-size:17px;margin-top:8px;max-width:62ch}
+
+  /* ============ SECTION 1: EVENT PAGE FLOW ============ */
+  .stage{
+    background:var(--mist);border-radius:var(--radius);
+    padding:40px 28px;text-align:center;
+  }
+  .stage .top-node{
+    display:inline-flex;flex-direction:column;align-items:center;gap:4px;
+    background:var(--paper);border:1px solid var(--line);border-radius:14px;
+    padding:18px 30px;box-shadow:var(--shadow);
+  }
+  .stage .top-node .ico{font-size:26px}
+  .stage .top-node b{font-size:16px}
+  .stage .top-node small{color:var(--ink-soft);font-size:13px}
+  .down{color:var(--ink-soft);font-size:24px;font-family:'Space Grotesk';margin:12px 0}
+  .split-line{width:1px;height:24px;background:var(--line);margin:0 auto}
+  .actions{
+    display:grid;grid-template-columns:1fr 1fr;gap:24px;
+    max-width:760px;margin:8px auto 0;text-align:left;
+  }
+  .action{
+    background:var(--paper);border:1px solid var(--line);border-radius:14px;
+    padding:24px;box-shadow:var(--shadow);position:relative;
+  }
+  .action.green{border-top:4px solid var(--green)}
+  .action.blue{border-top:4px solid var(--blue)}
+  .action .btn{
+    display:inline-flex;align-items:center;gap:9px;font-weight:700;font-size:15px;
+    padding:9px 16px;border-radius:10px;margin-bottom:16px;
+  }
+  .action.green .btn{background:var(--green-soft);color:#0f7a36}
+  .action.blue .btn{background:var(--blue-soft);color:#1d4ed8}
+  .action .leads{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--ink-soft)}
+  .action .target{
+    display:inline-flex;align-items:center;gap:8px;font-weight:700;color:var(--ink);
+    font-size:15px;background:var(--mist);padding:7px 13px;border-radius:9px;
+    font-family:'Space Grotesk';
+  }
+  .action .conn{color:var(--red);font-size:18px;font-family:'Space Grotesk'}
+  .choice-label{font-size:13px;font-weight:700;color:var(--ink-soft);
+    margin-bottom:12px;text-transform:uppercase;letter-spacing:.06em}
+  .choice-opts{display:grid;gap:10px}
+  .choice-opt{
+    display:flex;align-items:center;gap:10px;
+    background:var(--green-soft);border:1px solid #cdeed8;border-radius:10px;
+    padding:11px 14px;font-weight:600;font-size:14.5px;color:#0f7a36;
+  }
+  .choice-opt .ci{font-size:18px}
+
+  /* ============ SECTION 2: TOOLS ============ */
+  .tools{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+  .tool{
+    background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+    padding:26px;box-shadow:var(--shadow);display:flex;gap:18px;align-items:flex-start;
+    border-left:4px solid var(--line);
+  }
+  .tool.t-green{border-left-color:var(--green)}
+  .tool.t-blue{border-left-color:var(--blue)}
+  .tool.t-red{border-left-color:var(--red)}
+  .tool.t-purple{border-left-color:var(--purple)}
+  .tool .mark{
+    flex:none;width:52px;height:52px;border-radius:13px;
+    display:grid;place-items:center;font-size:24px;background:var(--mist);
+  }
+  .tool h4{font-size:19px;font-weight:700;margin-bottom:2px;font-family:'Space Grotesk'}
+  .tool .role{font-size:12.5px;font-weight:700;text-transform:uppercase;
+    letter-spacing:.08em;margin-bottom:10px}
+  .t-green .role{color:var(--green)}
+  .t-blue .role{color:var(--blue)}
+  .t-red .role{color:var(--red)}
+  .t-purple .role{color:var(--purple)}
+  .tool ul{list-style:none;margin-top:4px}
+  .tool li{font-size:14.5px;color:var(--ink-soft);padding:3px 0 3px 16px;position:relative}
+  .tool li::before{content:"–";position:absolute;left:0;color:var(--ink-soft)}
+
+  /* ============ SECTION 3: DATA FLOW ============ */
+  .flowmap{display:grid;gap:18px}
+  .lane{
+    background:var(--paper);border:1px solid var(--line);border-radius:14px;
+    padding:22px 24px;box-shadow:var(--shadow);
+    display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  }
+  .lane .tag{
+    flex:none;font-family:'Space Grotesk';font-weight:700;font-size:13px;
+    color:var(--red);text-transform:uppercase;letter-spacing:.1em;width:130px;
+  }
+  .chip{
+    display:inline-flex;align-items:center;gap:8px;
+    background:var(--mist);border:1px solid var(--line);border-radius:10px;
+    padding:9px 15px;font-weight:600;font-size:15px;font-family:'Space Grotesk';white-space:nowrap;
+  }
+  .chip .d{width:9px;height:9px;border-radius:50%}
+  .lane .go{color:var(--red);font-weight:700;font-size:14px;font-family:'Space Grotesk';
+    display:inline-flex;align-items:center;gap:6px}
+  .lane .note{font-size:13.5px;color:var(--ink-soft);flex:0 0 100%;width:100%;text-align:left;min-width:0;margin-top:2px}
+
+  /* ============ SECTION 4: KEY IDEA ============ */
+  .keys{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+  .key{
+    background:var(--paper);border:1px solid var(--line);border-radius:14px;
+    padding:26px;display:flex;gap:16px;align-items:flex-start;box-shadow:var(--shadow);
+  }
+  .key .n{
+    flex:none;width:40px;height:40px;border-radius:11px;
+    background:var(--ink);color:#fff;display:grid;place-items:center;
+    font-family:'Space Grotesk';font-weight:700;font-size:18px;
+  }
+  .key b{display:block;font-size:17px;margin-bottom:3px}
+  .key small{color:var(--ink-soft);font-size:14.5px}
+
+  /* ============ SECTION 5: NEXT STEPS ============ */
+  .roadmap{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:start}
+  .lane-card{
+    background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column;
+  }
+  .lane-card .cap{
+    padding:22px 24px 18px;border-top:4px solid var(--c);
+  }
+  .lane-card .step-tag{
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:'Space Grotesk';font-weight:700;font-size:12px;
+    text-transform:uppercase;letter-spacing:.1em;color:var(--c);
+    background:var(--c-soft);padding:5px 11px;border-radius:999px;margin-bottom:14px;
+  }
+  .lane-card h4{font-size:19px;font-weight:700;line-height:1.25;margin-bottom:6px}
+  .lane-card .cap p{font-size:13.5px;color:var(--ink-soft)}
+  .lane-card ul{list-style:none;padding:6px 24px 26px}
+  .lane-card li{
+    display:flex;gap:11px;align-items:flex-start;
+    padding:11px 0;font-size:15px;border-top:1px dashed var(--line);
+  }
+  .lane-card li:first-child{border-top:0}
+  .lane-card li .mk{flex:none;color:var(--c);font-weight:800;font-size:15px;line-height:1.5}
+
+  /* ---- Footer ---- */
+  footer{background:var(--ink);color:#9aa0a6;text-align:center;padding:54px 0;border:0}
+  footer .by{font-family:'Space Grotesk';color:#fff;font-size:20px;font-weight:600;margin-bottom:6px}
+  footer small{font-size:13px;letter-spacing:.04em}
+
+  /* ---- Responsive ---- */
+  @media(max-width:760px){
+    .wrap{padding:0 20px}
+    header.hero{padding:64px 0 72px}
+    section{padding:56px 0}
+    .sec-head{flex-direction:column;gap:12px;margin-bottom:32px}
+    .tools,.keys,.actions{grid-template-columns:1fr}
+    .roadmap{grid-template-columns:1fr}
+    .stage{padding:30px 18px}
+    .stage .top-node{width:100%;padding:18px 20px}
+    .lane{flex-direction:column;align-items:flex-start;gap:10px}
+    .lane .tag{width:auto}
+    .lane .chip{width:100%;justify-content:flex-start}
+    .lane .note{flex:none;width:100%;align-self:stretch;margin-top:4px}
+    .lane .go{transform:rotate(90deg);transform-origin:center;margin:2px 0 2px 8px}
+  }
+  @media(max-width:430px){
+    .wrap{padding:0 16px}
+    header.hero h1{font-size:32px}
+    header.hero p{font-size:16px}
+    .hero-pills span{font-size:12px;padding:7px 12px}
+    .tool{flex-direction:column;gap:14px}
+    .choice-opt{font-size:13.5px;padding:10px 12px}
+    .key{padding:22px}
+  }
+  @media(min-width:761px) and (max-width:920px){
+    .roadmap{grid-template-columns:1fr;max-width:640px;margin:0 auto}
+  }
+  @media(prefers-reduced-motion:no-preference){
+    section,.tool,.key,.lane,.action,.lane-card{animation:rise .6s ease both}
+  }
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Tesla Conference · System &amp; Data Architecture Proposal</div>
+    <h1 class="display">Two simple choices. One organized system.</h1>
+    <p>I designed a registration system around four trusted services. Guests get a clean, two-button experience — and behind the scenes, our data stays structured and ready to grow.</p>
+    <div class="hero-pills">
+      <span>Supabase</span><span>Eventbrite</span><span>Metabase</span><span>Chatbase</span>
+    </div>
+  </div>
+</header>
+
+<!-- EXECUTIVE SUMMARY -->
+<div class="exec">
+  <div class="wrap">
+    <div class="label">Executive Summary</div>
+    <p>A lightweight event system combining Eventbrite, Supabase, Metabase, and Chatbase to simplify registration and centralize all user and event data in one scalable structure.</p>
+  </div>
+</div>
+
+<!-- SECTION 1: EVENT PAGE FLOW -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">01</span>
+      <div>
+        <div class="sec-title display">The event page flow</div>
+        <div class="sec-sub">Every guest lands on one page and chooses one of two buttons. Each button leads exactly where it should.</div>
+      </div>
+    </div>
+
+    <div class="stage">
+      <div class="top-node"><span class="ico">🧑</span><b>User</b><small>Arrives at the event page</small></div>
+      <div class="down">↓</div>
+      <div class="top-node"><span class="ico">📄</span><b>Event Page</b><small>One page, two buttons</small></div>
+      <div class="down">↓</div>
+      <div class="split-line"></div>
+
+      <div class="actions">
+        <div class="action green">
+          <span class="btn">💬 Choose how you want to contact us or get help</span>
+          <div class="choice-label">Choose how you want to contact us</div>
+          <div class="choice-opts">
+            <div class="choice-opt"><span class="ci">🤖</span>Ask Tesla assistant</div>
+            <div class="choice-opt"><span class="ci">📩</span>Connect with our Conference Team</div>
+          </div>
+        </div>
+        <div class="action blue">
+          <span class="btn">🎟️ Register</span>
+          <div class="leads">
+            <span class="conn">→</span>
+            <span class="target">💳 Eventbrite Checkout</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 2: TOOLS -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">02</span>
+      <div>
+        <div class="sec-title display">The four tools, simply explained</div>
+        <div class="sec-sub">Each one has a single, clear job. We connect proven services rather than build our own.</div>
+      </div>
+    </div>
+
+    <div class="tools">
+      <div class="tool t-green">
+        <div class="mark">🗄️</div>
+        <div>
+          <h4>Supabase</h4>
+          <div class="role">Central Database + Backend</div>
+          <ul>
+            <li>Central database and backend layer</li>
+            <li>Stores all structured data</li>
+          </ul>
+        </div>
+      </div>
+      <div class="tool t-blue">
+        <div class="mark">🎟️</div>
+        <div>
+          <h4>Eventbrite</h4>
+          <div class="role">Ticketing &amp; Payments</div>
+          <ul>
+            <li>Handles ticketing and payments</li>
+            <li>Secure external system</li>
+          </ul>
+        </div>
+      </div>
+      <div class="tool t-red">
+        <div class="mark">📊</div>
+        <div>
+          <h4>Metabase</h4>
+          <div class="role">Analytics Dashboard</div>
+          <ul>
+            <li>Dashboard for analytics</li>
+            <li>Shows registrations and insights</li>
+          </ul>
+        </div>
+      </div>
+      <div class="tool t-purple">
+        <div class="mark">💬</div>
+        <div>
+          <h4>Chatbase</h4>
+          <div class="role">AI Chatbot Support</div>
+          <ul>
+            <li>AI chatbot for FAQs (always available as a website pop-up)</li>
+            <li>Guides users to registration</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 3: DATA FLOW -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">03</span>
+      <div>
+        <div class="sec-title display">How the data moves</div>
+        <div class="sec-sub">Three simple paths keep every piece of information in the right place.</div>
+      </div>
+    </div>
+
+    <div class="flowmap">
+      <div class="lane">
+        <span class="tag">Registrations</span>
+        <span class="chip"><span class="d" style="background:var(--blue)"></span>Eventbrite</span>
+        <span class="go">— sync →</span>
+        <span class="chip"><span class="d" style="background:var(--green)"></span>Supabase</span>
+        <span class="go">→</span>
+        <span class="chip"><span class="d" style="background:var(--red)"></span>Metabase</span>
+        <span class="note">Ticket sales flow back into our database and into the dashboard.</span>
+      </div>
+
+      <div class="lane">
+        <span class="tag">Questions</span>
+        <span class="chip"><span class="d" style="background:var(--ink-soft)"></span>📝 Forms</span>
+        <span class="go">→</span>
+        <span class="chip"><span class="d" style="background:var(--green)"></span>Supabase</span>
+        <span class="note">Every question and interest signal is stored, never lost.</span>
+      </div>
+
+      <div class="lane">
+        <span class="tag">Chatbot</span>
+        <span class="chip"><span class="d" style="background:var(--purple)"></span>💬 Chatbot</span>
+        <span class="go">→</span>
+        <span class="chip"><span class="d" style="background:var(--ink-soft)"></span>Supports users</span>
+        <span class="go">&amp; →</span>
+        <span class="chip"><span class="d" style="background:var(--blue)"></span>Eventbrite</span>
+        <span class="note">Answers users and points them straight to registration.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 4: KEY IDEA -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">04</span>
+      <div>
+        <div class="sec-title display">The key idea</div>
+        <div class="sec-sub">A strategy that feels effortless on the surface and stays organized underneath.</div>
+      </div>
+    </div>
+
+    <div class="keys">
+      <div class="key"><span class="n">1</span><div><b>Simple user experience</b><small>Two clear buttons — ask, or register. Nothing more to learn.</small></div></div>
+      <div class="key"><span class="n">2</span><div><b>Structured backend data</b><small>Everything lands organized in one central place.</small></div></div>
+      <div class="key"><span class="n">3</span><div><b>No complex infrastructure</b><small>We rely on trusted services instead of building our own.</small></div></div>
+      <div class="key"><span class="n">4</span><div><b>Scalable for future events</b><small>The same system grows with us, event after event.</small></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 5: NEXT STEPS -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">05</span>
+      <div>
+        <div class="sec-title display">Next steps</div>
+        <div class="sec-sub">A clear split of who does what — so we can move from decision to launch without friction.</div>
+      </div>
+    </div>
+
+    <div class="roadmap">
+      <div class="lane-card" style="--c:var(--green);--c-soft:var(--green-soft)">
+        <div class="cap">
+          <span class="step-tag">🟢 Start now</span>
+          <h4>What I can start immediately</h4>
+          <p>No approval or access needed.</p>
+        </div>
+        <ul>
+          <li><span class="mk">›</span>Database structure design</li>
+          <li><span class="mk">›</span>System architecture finalization</li>
+          <li><span class="mk">›</span>Integration planning between tools</li>
+          <li><span class="mk">›</span>Local prototype preparation</li>
+        </ul>
+      </div>
+
+      <div class="lane-card" style="--c:#d97706;--c-soft:#fef3e2">
+        <div class="cap">
+          <span class="step-tag">🟡 Your decision</span>
+          <h4>What I need from you</h4>
+          <p>Decisions required before we build.</p>
+        </div>
+        <ul>
+          <li><span class="mk">›</span>Confirm Eventbrite as the registration system</li>
+          <li><span class="mk">›</span>Confirm event structure (free vs paid workflow)</li>
+          <li><span class="mk">›</span>Confirm Supabase as the central database</li>
+          <li><span class="mk">›</span>Confirm access to existing infrastructure</li>
+        </ul>
+      </div>
+
+      <div class="lane-card" style="--c:var(--blue);--c-soft:var(--blue-soft)">
+        <div class="cap">
+          <span class="step-tag">🔵 Together</span>
+          <h4>What we will do together</h4>
+          <p>Collaborative implementation phase.</p>
+        </div>
+        <ul>
+          <li><span class="mk">›</span>Configure all four tools</li>
+          <li><span class="mk">›</span>Connect forms, registration &amp; database sync</li>
+          <li><span class="mk">›</span>Run end-to-end testing</li>
+          <li><span class="mk">›</span>Ensure full integration with the website</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="by">Created by Luciana Popa</div>
+    <small>Tesla Conference · Registration System Proposal</small>
+  </div>
+</footer>
+
+</body>
+</html>
